@@ -46,7 +46,7 @@ io.on('connection',function(socket){
     }
   });
   socket.on('join_room',function(data){
-    if(!room||room.roomName!=data.roomName){
+    if(!room||room.roomName!==data.roomName){
       if(rooms[data.roomName]){
         room=rooms[data.roomName]
         states[data.roomName]=states[data.roomName]+1
@@ -55,7 +55,7 @@ io.on('connection',function(socket){
       console.log(JSON.stringify(rooms))
       console.log(JSON.stringify(data))
       console.log(JSON.stringify(room))
-        if(data.password&&data.password==room.password){
+        if(data.password&&data.password===room.password){
           canWrite=true
           socket.emit('in_room',{roomName:data.roomName,canWrite:true})
         }else{

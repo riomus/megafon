@@ -322,7 +322,7 @@ options: {
     ngtemplates: {
       options: {
         // This should be the name of your apps angular module
-        module: 'pejntApp',
+        module: 'megafon',
         htmlmin: {
           collapseBooleanAttributes: true,
           collapseWhitespace: true,
