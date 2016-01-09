@@ -24,6 +24,7 @@ server.listen(config.port, config.ip, function () {
 
 var states={};
 var rooms={};
+var texts={};
 
 io.on('connection',function(socket){
   var room=false;
@@ -57,22 +58,23 @@ io.on('connection',function(socket){
       console.log(JSON.stringify(room))
         if(data.password&&data.password===room.password){
           canWrite=true
-          socket.emit('in_room',{roomName:data.roomName,canWrite:true})
+          socket.emit('in_room',{roomName:data.roomName,canWrite:true,text:texts[data.roomName]})
         }else{
           canWrite=false
-          socket.emit('in_room',{roomName:data.roomName,canWrite:false})
+          socket.emit('in_room',{roomName:data.roomName,canWrite:false,text:texts[data.roomName]})
         }
       }else{
         socket.emit('room_dont_exsists','error')
       }
     }
     else{
-      socket.emit('in_room',{'roomName':data.roomName,'canWrite':canWrite===true})
+      socket.emit('in_room',{'roomName':data.roomName,'canWrite':canWrite===true,text:texts[data.roomName]})
     }
   });
   socket.on('write',function(data){
     console.log('text update request')
     if(canWrite){
+      texts[room.roomName]=data
       console.log('updating ' + JSON.stringify(data) )
       io.to(room.roomName).emit('text_update',data)
     }
@@ -96,6 +98,7 @@ io.on('connection',function(socket){
       states[room.roomName]=states[room.roomName]-1
       if(!states[room.roomName]){
         rooms[room.roomName]=false
+        texts[room.roomName]=undefined
       }
       room=false
 
