@@ -74,6 +74,7 @@ io.on('connection',function(socket){
       states[room.roomName]=states[room.roomName]-1
       if(!states[room.roomName]){
         rooms[room.roomName]=false
+        texts[room.roomName]=undefined
       }
       room=false
 
