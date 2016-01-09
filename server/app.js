@@ -28,8 +28,12 @@ var rooms={};
 io.on('connection',function(socket){
   var room=false;
   var canWrite=false;
+  console.log("User connected");
   socket.on('create_room',function(data){
+    console.log(JSON.stringify(data))
     if(!rooms[data.roomName]){
+      console.log('creating room ')
+      console.log(JSON.stringify(data))
       room=data
       rooms[data.roomName]=data
       states[data.roomName]=1
@@ -37,6 +41,7 @@ io.on('connection',function(socket){
       socket.join(data.roomName)
       socket.emit('in_room',{roomName:data.roomName,canWrite:true})
     }else{
+      console.log('room_exsists')
       socket.emit('room_exsists')
     }
   });
@@ -46,6 +51,10 @@ io.on('connection',function(socket){
         room=rooms[data.roomName]
         states[data.roomName]=states[data.roomName]+1
         socket.join(data.roomName)
+          console.log('!!!!!!!!!!!!!!')
+      console.log(JSON.stringify(rooms))
+      console.log(JSON.stringify(data))
+      console.log(JSON.stringify(room))
         if(data.password&&data.password===room.password){
           canWrite=true
           socket.emit('in_room',{roomName:data.roomName,canWrite:true})
@@ -62,11 +71,14 @@ io.on('connection',function(socket){
     }
   });
   socket.on('write',function(data){
+    console.log('text update request')
     if(canWrite){
+      console.log('updating ' + JSON.stringify(data) )
       io.to(room.roomName).emit('text_update',data)
     }
   });
   socket.on('disconnect',function(){
+    console.log('user exited');
     canWrite=false
     if(room){
       states[room.roomName]=states[room.roomName]-1
@@ -78,6 +90,7 @@ io.on('connection',function(socket){
     }
   });
   socket.on('left',function(){
+    console.log('left');
     canWrite=false
     if(room){
       states[room.roomName]=states[room.roomName]-1
