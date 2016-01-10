@@ -7,9 +7,12 @@
 	padding:10px;
 }
 
-.board h1{
-	text-align:center;
-
+.board>div{
+	margin:0 auto;
+	width:80%
+}
+.board ul{
+	margin:0 auto
 }
 
 .fade.ng-enter {
