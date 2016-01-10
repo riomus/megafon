@@ -1,8 +1,11 @@
 'use strict';
 
 angular.module('megafon')
-.controller('MainCtrl', ['$scope','io','$state',function ($scope,io,$state) {
+.controller('MainCtrl', ['$scope','io','$state','$interval','$http',function ($scope,io,$state,$interval,$http) {
 	io.emit('left');
+	$interval(function(){
+		$http.get('/state?'+Math.random());
+	},10000);
 	$scope.create=function(name,pass){
 		io.emit('create_room',{roomName:name,password:pass});
 	};

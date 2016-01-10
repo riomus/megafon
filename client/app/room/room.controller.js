@@ -2,6 +2,9 @@
 
 angular.module('megafon')
 .controller('RoomCtrl', ['$scope','io','$stateParams','$state',function ($scope,io,$stateParams,$state) {
+  io.on('connect',function(){
+     io.emit('join_room',{'roomName':$stateParams.roomName});
+  });
  io.emit('join_room',{'roomName':$stateParams.roomName});
 
  io.on('room_dont_exsists',function(){
