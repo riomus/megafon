@@ -29,6 +29,7 @@ var texts={};
 io.on('connection',function(socket){
   var room=false;
   var canWrite=false;
+  var interval=setInterval(function(){socket.emit('bump')},10000)
   socket.on('create_room',function(data){
     if(!rooms[data.roomName]){
       room=data
@@ -69,6 +70,7 @@ io.on('connection',function(socket){
     }
   });
   socket.on('disconnect',function(){
+    clearInterval(interval);
     canWrite=false
     if(room){
       states[room.roomName]=states[room.roomName]-1
